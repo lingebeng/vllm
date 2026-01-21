@@ -201,7 +201,7 @@ class SwinAttention(nn.Module):
         hidden_states: torch.Tensor,
         attention_mask: torch.FloatTensor | None = None,
         output_attentions: bool | None = False,
-    ) -> tuple[torch.Tensor]:
+    ) -> tuple[torch.Tensor, ...]:
         self_outputs = self.self(hidden_states, attention_mask, output_attentions)
         attention_output = self.output(self_outputs[0], hidden_states)
         outputs = (attention_output,) + self_outputs[1:]
@@ -337,7 +337,7 @@ class SwinStage(nn.Module):
         input_dimensions: tuple[int, int],
         output_attentions: bool | None = False,
         always_partition: bool | None = False,
-    ) -> tuple[torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor, tuple[int, int, int, int], ...]:
         height, width = input_dimensions
         for i, layer_module in enumerate(self.blocks):
             layer_outputs = layer_module(
